@@ -9,7 +9,7 @@ from validators import validate_text, validate_lengths, ValidationError
 app = FastAPI(
     title="AI Text Summarizer",
     description="BART-powered text summarization API with multiple styles",
-    version="1.1.0"
+    version="1.2.0"
 )
 
 app.add_middleware(
@@ -23,20 +23,32 @@ app.add_middleware(
 
 @app.get("/")
 def health_check():
-    return {"status": "ok", "service": "AI Text Summarizer", "version": "1.1.0"}
+    return {"status": "ok", "service": "AI Text Summarizer", "version": "1.2.0"}
 
 
 @app.post("/summarize", response_model=SummarizeResponse)
 def summarize(request: SummarizeRequest):
     try:
         validate_text(request.text)
-        validate_lengths(request.min_length, request.max_length)
+        
+        # Convert words to tokens for BART (1 word ≈ 1.33 tokens)
+        token_max = int(request.max_length * 1.33)
+        token_min = int(request.min_length * 1.33)
+        
+        # Ensure valid token ranges
+        token_max = min(500, max(50, token_max))
+        token_min = min(200, max(10, token_min))
+        
+        if token_min >= token_max:
+            token_min = max(10, token_max - 20)
+        
+        validate_lengths(token_min, token_max)
 
         summarizer = get_summarizer()
         summary_text = summarizer.summarize(
             request.text,
-            max_length=request.max_length,
-            min_length=request.min_length,
+            max_length=token_max,
+            min_length=token_min,
             style=request.style.value
         )
 

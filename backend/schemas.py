@@ -12,8 +12,8 @@ class SummaryStyle(str, Enum):
 
 class SummarizeRequest(BaseModel):
     text: str = Field(..., min_length=50, max_length=10000, description="Text to summarize")
-    max_length: int = Field(default=150, ge=50, le=500, description="Maximum summary length in tokens")
-    min_length: int = Field(default=30, ge=10, le=200, description="Minimum summary length in tokens")
+    max_length: int = Field(default=150, ge=50, le=400, description="Maximum summary length in words")
+    min_length: int = Field(default=30, ge=20, le=150, description="Minimum summary length in words")
     style: SummaryStyle = Field(default=SummaryStyle.CONCISE, description="Summary writing style")
 
 

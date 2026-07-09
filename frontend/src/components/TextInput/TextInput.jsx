@@ -31,6 +31,8 @@ function TextInput({ onSubmit, isLoading, onClear }) {
   const handleClear = useCallback(() => {
     setText('');
     setStyle('concise');
+    setMaxLength(150);
+    setMinLength(30);
     onClear();
     textareaRef.current?.focus();
   }, [onClear]);
@@ -39,7 +41,7 @@ function TextInput({ onSubmit, isLoading, onClear }) {
     const value = parseInt(e.target.value, 10);
     setMaxLength(value);
     if (value <= minLength) {
-      setMinLength(Math.max(10, value - 20));
+      setMinLength(Math.max(20, value - 20));
     }
   }, [minLength]);
 
@@ -71,7 +73,7 @@ function TextInput({ onSubmit, isLoading, onClear }) {
               id="word-count-hint"
               className={`${styles.wordCount} ${isTooShort || isTooLong ? styles.invalid : ''}`}
             >
-              {wordCount} words · {charCount} chars
+              {wordCount} words
               {isTooShort && ' (min 20)'}
               {isTooLong && ' (max 2000)'}
             </span>
@@ -109,14 +111,13 @@ function TextInput({ onSubmit, isLoading, onClear }) {
         <div className={styles.controls}>
           <div className={styles.sliderGroup}>
             <label htmlFor="min-length" className={styles.sliderLabel}>
-              Min Length: <span className={styles.sliderValue}>{minLength}</span>
-              <span className={styles.sliderHint}> tokens</span>
+              Min Words: <span className={styles.sliderValue}>{minLength}</span>
             </label>
             <input
               id="min-length"
               type="range"
-              min={10}
-              max={200}
+              min={20}
+              max={150}
               value={minLength}
               onChange={handleMinLengthChange}
               className={styles.slider}
@@ -126,25 +127,19 @@ function TextInput({ onSubmit, isLoading, onClear }) {
 
           <div className={styles.sliderGroup}>
             <label htmlFor="max-length" className={styles.sliderLabel}>
-              Max Length: <span className={styles.sliderValue}>{maxLength}</span>
-              <span className={styles.sliderHint}> tokens</span>
+              Max Words: <span className={styles.sliderValue}>{maxLength}</span>
             </label>
             <input
               id="max-length"
               type="range"
               min={50}
-              max={500}
+              max={400}
               value={maxLength}
               onChange={handleMaxLengthChange}
               className={styles.slider}
               disabled={isLoading}
             />
           </div>
-        </div>
-
-        <div className={styles.hint}>
-          <span className={styles.hintIcon}>ℹ</span>
-          1 token ≈ 0.75 words. Adjust sliders for longer or shorter summaries.
         </div>
 
         <button

@@ -20,7 +20,7 @@ function Header() {
             <line x1="16" y1="17" x2="8" y2="17" />
             <polyline points="10 9 9 9 8 9" />
           </svg>
-          <h1 className={styles.title}>AI Text Summarizer</h1>
+          <h1 className={styles.title}>Text Summarizer</h1>
         </div>
         <p className={styles.subtitle}>
           Powered by BART — Generate concise, human-like summaries
