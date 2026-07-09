@@ -7,7 +7,7 @@ from summarizer import get_summarizer
 from validators import validate_text, validate_lengths, ValidationError
 
 app = FastAPI(
-    title="AI Text Summarizer",
+    title="Text Summarizer",
     description="BART-powered text summarization API with multiple styles",
     version="1.2.0"
 )

@@ -8,6 +8,7 @@ const STYLE_LABELS = {
   bullets: 'Bullet Points',
   executive: 'Executive',
   academic: 'Academic',
+  context_preserve: 'Context Preserve',
 };
 
 function SummaryOutput({ summary, originalLength, summaryLength, error, style, onClear }) {
@@ -25,9 +26,20 @@ function SummaryOutput({ summary, originalLength, summaryLength, error, style, o
     downloadAsText(summary, `summary${styleLabel}-${timestamp}.txt`);
   }, [summary, style]);
 
-  const compressionRatio = originalLength > 0 
-    ? Math.round((1 - summaryLength / originalLength) * 100) 
-    : 0;
+  // Fixed compression calculation
+  let compressionLabel = '';
+  let compressionClass = styles.compression;
+  
+  if (originalLength > 0 && summaryLength < originalLength) {
+    const ratio = Math.round((1 - summaryLength / originalLength) * 100);
+    compressionLabel = `${ratio}% shorter`;
+  } else if (originalLength > 0 && summaryLength > originalLength) {
+    const ratio = Math.round((summaryLength / originalLength - 1) * 100);
+    compressionLabel = `${ratio}% longer`;
+    compressionClass = styles.longer;
+  } else {
+    compressionLabel = 'Same length';
+  }
 
   if (error) {
     return (
@@ -65,8 +77,8 @@ function SummaryOutput({ summary, originalLength, summaryLength, error, style, o
           <span className={styles.stat}>
             {originalLength} → {summaryLength} words
           </span>
-          <span className={`${styles.stat} ${styles.compression}`}>
-            {compressionRatio}% shorter
+          <span className={`${styles.stat} ${compressionClass}`}>
+            {compressionLabel}
           </span>
         </div>
       </div>

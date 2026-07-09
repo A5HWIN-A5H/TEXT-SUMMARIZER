@@ -11,14 +11,15 @@ export function useSummarizer() {
 
   const generateSummary = useCallback(async (text, maxLength, minLength, selectedStyle) => {
     const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
-    if (wordCount < 20) {
-      setError(`Text too short. Minimum 20 words required. Current: ${wordCount}.`);
-      return;
+    if (wordCount < 50) {
+        setError(`Text too short. Minimum 50 words required for reliable summarization. Current: ${wordCount}.`);
+        return;
     }
     if (wordCount > 2000) {
-      setError(`Text too long. Maximum 2000 words allowed. Current: ${wordCount}.`);
-      return;
+        setError(`Text too long. Maximum 2000 words. Current: ${wordCount}.`);
+        return;
     }
+    
 
     setIsLoading(true);
     setError(null);

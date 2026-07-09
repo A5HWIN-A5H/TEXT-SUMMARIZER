@@ -7,6 +7,7 @@ const STYLES = [
   { value: 'bullets', label: 'Bullet Points', desc: 'Key points as a list' },
   { value: 'executive', label: 'Executive', desc: 'Business-focused, actionable' },
   { value: 'academic', label: 'Academic', desc: 'Formal, preserves citations' },
+  { value: 'context_preserve', label: 'Context Preserve', desc: 'Summary + dropped key facts recovered' },
 ];
 
 function TextInput({ onSubmit, isLoading, onClear }) {
@@ -18,9 +19,9 @@ function TextInput({ onSubmit, isLoading, onClear }) {
 
   const wordCount = useMemo(() => text.trim().split(/\s+/).filter(Boolean).length, [text]);
   const charCount = text.length;
-  const isTooShort = wordCount > 0 && wordCount < 20;
+  const isTooShort = wordCount > 0 && wordCount < 50;
   const isTooLong = wordCount > 2000;
-  const isValid = wordCount >= 20 && wordCount <= 2000;
+  const isValid = wordCount >= 50 && wordCount <= 2000;
 
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
@@ -63,7 +64,7 @@ function TextInput({ onSubmit, isLoading, onClear }) {
             className={`${styles.textarea} ${isTooShort ? styles.invalid : ''} ${isTooLong ? styles.invalid : ''}`}
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Paste your article, report, or document here (minimum 20 words)..."
+            placeholder="Paste your article, report, or document here (minimum 50 words for best results)..."
             rows={10}
             disabled={isLoading}
             aria-describedby="word-count-hint"

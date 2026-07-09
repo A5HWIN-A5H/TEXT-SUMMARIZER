@@ -8,6 +8,7 @@ class SummaryStyle(str, Enum):
     BULLET_POINTS = "bullets"
     EXECUTIVE = "executive"
     ACADEMIC = "academic"
+    CONTEXT_PRESERVE = "context_preserve"
 
 
 class SummarizeRequest(BaseModel):
